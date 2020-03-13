@@ -3,44 +3,52 @@
 
 <span>Powered by Quenix Apps</span><br><br>
 
-<div class="result"></div>
+<div class="result" style="display: inline-block;"></div>&nbsp;&nbsp;&nbsp;<button>Крутить</button>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 <script>
+
+    const MID = 3;  // Среднее число выпаданий
+    const KD = 5;   // Время возобновления в минутах
 
     let HEAP1 = 0;
     let HEAP2 = 0;
     let CALC = 0;
     let resObject = {};
 
+    let SLOT_ALL, SLOT_BUSY, RESULT, ADD_BTN;
+
     $(function () {
 
-        let SLOT_ALL = $('.slot_all');
-        let SLOT_BUSY = $('.slot_busy');
-        let RESULT = $('.result');
+        SLOT_ALL = $('.slot_all');
+        SLOT_BUSY = $('.slot_busy');
+        RESULT = $('.result');
+        ADD_BTN = $('button');
+
+        ADD_BTN.hide();
 
         SLOT_ALL.keyup(function () {
-            HEAP1 = SLOT_ALL.val();
+            HEAP1 = parseInt(SLOT_ALL.val());
         });
 
         SLOT_BUSY.keyup(function () {
-            HEAP2 = SLOT_BUSY.val();
+            HEAP2 = parseInt(SLOT_BUSY.val());
             resObject = calcPG();
-            if (resObject.status) {
-                RESULT.html('Кол-во: ' + resObject.iter);
-                RESULT.append(' / Время: ' + resObject.time);
-            } else {
-                RESULT.html(resObject.message);
-            }
+            render();
+        });
+
+        ADD_BTN.click(function () {
+            HEAP2 += MID;
+            resObject = calcPG();
+            render();
+            SLOT_BUSY.val(HEAP2);
         });
 
     });
 
     function calcPG() {
-        let diff = (HEAP1 - HEAP2);     // Разница слотов
-        let middle = 3;                 // Среднее число выпаданий
-        let kd = 5;                     // Время возобновления в минутах
+        let diff = (HEAP1 - HEAP2);
 
         if (diff < 0) return {
             'status': false,
@@ -54,9 +62,20 @@
 
         return {
             'status': true,
-            'iter': Math.round(diff / middle),
-            'time': timeConvert(((diff / middle) * kd) * 60)
+            'iter': Math.round(diff / MID),
+            'time': timeConvert(((diff / MID) * KD) * 60)
         };
+    }
+
+    function render() {
+        if (resObject.status) {
+            RESULT.html('Кол-во: ' + resObject.iter);
+            RESULT.append(' / Время: ' + resObject.time);
+            ADD_BTN.show();
+        } else {
+            RESULT.html(resObject.message);
+            ADD_BTN.hide();
+        }
     }
 
     function timeConvert(sec) {
