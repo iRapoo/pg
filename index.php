@@ -3,7 +3,9 @@
 
 <span>Powered by Quenix Apps</span><br><br>
 
-<div class="result" style="display: inline-block;"></div>&nbsp;&nbsp;&nbsp;<button>Крутить</button>
+<div class="result" style="display: inline-block;"></div>&nbsp;&nbsp;&nbsp;
+<button>Крутить</button><br>
+<div class="timeout"></div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
@@ -17,7 +19,8 @@
     let CALC = 0;
     let resObject = {};
 
-    let SLOT_ALL, SLOT_BUSY, RESULT, ADD_BTN;
+    let SLOT_ALL, SLOT_BUSY, RESULT, ADD_BTN, TIMEOUT;
+    let timerId;
 
     $(function () {
 
@@ -25,15 +28,16 @@
         SLOT_BUSY = $('.slot_busy');
         RESULT = $('.result');
         ADD_BTN = $('button');
+        TIMEOUT = $('.timeout');
 
         ADD_BTN.hide();
 
         SLOT_ALL.keyup(function () {
-            HEAP1 = parseInt(SLOT_ALL.val());
+            HEAP1 = parseInt(SLOT_ALL.val()) || 0;
         });
 
         SLOT_BUSY.keyup(function () {
-            HEAP2 = parseInt(SLOT_BUSY.val());
+            HEAP2 = parseInt(SLOT_BUSY.val()) || 0;
             resObject = calcPG();
             render();
         });
@@ -43,6 +47,10 @@
             resObject = calcPG();
             render();
             SLOT_BUSY.val(HEAP2);
+
+            localStorage.setItem('time_position', Date.now().toString());
+            clearInterval(timerId);
+            timerId = setInterval(countDown);
         });
 
     });
@@ -76,6 +84,14 @@
             RESULT.html(resObject.message);
             ADD_BTN.hide();
         }
+    }
+
+    function countDown() {
+        let timePosition = parseInt(localStorage.getItem('time_position')) + (1000 * KD * 3600);
+        let timeNow = Date.now();
+        let timeCalc = timePosition - timeNow;
+
+        // TIMEOUT.html(Math.ceil(timeCalc / (1000 * KD * 3600)));
     }
 
     function timeConvert(sec) {
