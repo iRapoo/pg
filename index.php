@@ -14,8 +14,8 @@
     const MID = 3;  // Среднее число выпаданий
     const KD = 5;   // Время возобновления в минутах
 
-    let HEAP1 = 0;
-    let HEAP2 = 0;
+    let HEAP = JSON.parse(localStorage.getItem('savedHeap') || { h1: 0, h2: 0 });
+
     let CALC = 0;
     let resObject = {};
 
@@ -33,19 +33,19 @@
         ADD_BTN.hide();
 
         SLOT_ALL.keyup(function () {
-            HEAP1 = parseInt(SLOT_ALL.val()) || 0;
+            HEAP.h1 = parseInt(SLOT_ALL.val()) || 0;
             render();
         });
 
         SLOT_BUSY.keyup(function () {
-            HEAP2 = parseInt(SLOT_BUSY.val()) || 0;
+            HEAP.h2 = parseInt(SLOT_BUSY.val()) || 0;
             render();
         });
 
         ADD_BTN.click(function () {
-            HEAP2 += MID;
+            HEAP.h2 += MID;
             render();
-            SLOT_BUSY.val(HEAP2);
+            SLOT_BUSY.val(HEAP.h2);
 
             localStorage.setItem('time_position', Date.now().toString());
             clearInterval(timerId);
@@ -55,7 +55,7 @@
     });
 
     function calcPG() {
-        let diff = (HEAP1 - HEAP2);
+        let diff = (HEAP.h1 - HEAP.h2);
 
         if (diff < 0) return {
             'status': false,
@@ -84,6 +84,7 @@
             RESULT.html(resObject.message);
             ADD_BTN.hide();
         }
+        localStorage.setItem('savedHeap', JSON.stringify(HEAP));
     }
 
     function countDown() {
