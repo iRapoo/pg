@@ -15,7 +15,6 @@
     const KD = 5;   // Время возобновления в минутах
 
     let HEAP = JSON.parse(localStorage.getItem('savedHeap')) || {h1: 0, h2: 0};
-
     let CALC = 0;
     let resObject = {};
 
@@ -31,10 +30,8 @@
         TIMEOUT = $('.timeout');
 
         if (HEAP.h1 > 0) SLOT_ALL.val(HEAP.h1);
-        if (HEAP.h2 > 0) SLOT_BUSY.val(HEAP.h2);
+        if (HEAP.h2 > 0) SLOT_BUSY.val(HEAP.h2); else ADD_BTN.hide();
         if (HEAP.h1 > 0 || HEAP.h2 > 0) render();
-
-        ADD_BTN.hide();
 
         SLOT_ALL.keyup(function () {
             HEAP.h1 = parseInt(SLOT_ALL.val()) || 0;
