@@ -14,7 +14,7 @@
     const MID = 3;  // Среднее число выпаданий
     const KD = 5;   // Время возобновления в минутах
 
-    let HEAP = JSON.parse(localStorage.getItem('savedHeap') || { h1: 0, h2: 0 });
+    let HEAP = JSON.parse(localStorage.getItem('savedHeap')) || {h1: 0, h2: 0};
 
     let CALC = 0;
     let resObject = {};
@@ -29,6 +29,10 @@
         RESULT = $('.result');
         ADD_BTN = $('button');
         TIMEOUT = $('.timeout');
+
+        if (HEAP.h1 > 0) SLOT_ALL.val(HEAP.h1);
+        if (HEAP.h2 > 0) SLOT_BUSY.val(HEAP.h2);
+        if (HEAP.h1 > 0 || HEAP.h2 > 0) render();
 
         ADD_BTN.hide();
 
