@@ -34,17 +34,16 @@
 
         SLOT_ALL.keyup(function () {
             HEAP1 = parseInt(SLOT_ALL.val()) || 0;
+            render();
         });
 
         SLOT_BUSY.keyup(function () {
             HEAP2 = parseInt(SLOT_BUSY.val()) || 0;
-            resObject = calcPG();
             render();
         });
 
         ADD_BTN.click(function () {
             HEAP2 += MID;
-            resObject = calcPG();
             render();
             SLOT_BUSY.val(HEAP2);
 
@@ -76,6 +75,7 @@
     }
 
     function render() {
+        resObject = calcPG();
         if (resObject.status) {
             RESULT.html('Кол-во: ' + resObject.iter);
             RESULT.append(' / Время: ' + resObject.time);
