@@ -94,7 +94,7 @@
 
     function countDown() {
         let timePosition = parseInt(localStorage.getItem('timePosition'));
-        let timePositionFuture = timePosition + ((1000 * 60) * 5);
+        let timePositionFuture = timePosition + ((1000 * 60) * KD);
         let timeNow = Date.now();
         let timeCalc = timePositionFuture - timeNow;
 
