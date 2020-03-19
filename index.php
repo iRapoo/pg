@@ -4,8 +4,7 @@
 <span>Powered by Quenix Apps</span><br><br>
 
 <div class="result" style="display: inline-block;"></div>&nbsp;&nbsp;&nbsp;
-<button>Крутить</button><br>
-<div class="timeout"></div>
+<button>Крутить</button>&nbsp;&nbsp;&nbsp;<span class="timeout"></span>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
@@ -41,16 +40,14 @@
         SLOT_BUSY.keyup(function () {
             HEAP.h2 = parseInt(SLOT_BUSY.val()) || 0;
             render();
+            updateTimeCountDown();
         });
 
         ADD_BTN.click(function () {
             HEAP.h2 += MID;
             render();
             SLOT_BUSY.val(HEAP.h2);
-
-            localStorage.setItem('time_position', Date.now().toString());
-            clearInterval(timerId);
-            timerId = setInterval(countDown);
+            updateTimeCountDown();
         });
 
     });
@@ -86,20 +83,46 @@
             ADD_BTN.hide();
         }
         localStorage.setItem('savedHeap', JSON.stringify(HEAP));
+        timerId = setInterval(countDown);
+    }
+
+    function updateTimeCountDown() {
+        localStorage.setItem('timePosition', Date.now().toString());
+        clearInterval(timerId);
+        timerId = setInterval(countDown);
     }
 
     function countDown() {
-        let timePosition = parseInt(localStorage.getItem('time_position')) + (1000 * KD * 3600);
+        let timePosition = parseInt(localStorage.getItem('timePosition'));
+        let timePositionFuture = timePosition + ((1000 * 60) * 5);
         let timeNow = Date.now();
-        let timeCalc = timePosition - timeNow;
+        let timeCalc = timePositionFuture - timeNow;
 
-        // TIMEOUT.html(Math.ceil(timeCalc / (1000 * KD * 3600)));
+        let formatTime = getTime(timeCalc);
+        if (timeCalc > 0) {
+            TIMEOUT.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
+        } else {
+            TIMEOUT.html('Жмакай давай!!!');
+            if (timePosition > 0) {
+                alert('Жмакай давай!!!');
+                clearInterval(timerId);
+                localStorage.removeItem('timePosition');
+            }
+        }
     }
 
     function timeConvert(sec) {
         let h = sec / 3600 ^ 0;
         let m = (sec - h * 3600) / 60 ^ 0;
-        return ((h < 10 ? "0" + h : h) + " ч. " + (m < 10 ? "0" + m : m) + " мин. ");
+        return ((h < 10 ? '0' + h : h) + ' ч. ' + (m < 10 ? '0' + m : m) + ' мин. ');
+    }
+
+    function getTime(millis) {
+        return {
+            hours: Math.floor(millis / 36e5),
+            mins: Math.floor((millis % 36e5) / 6e4),
+            secs: Math.floor((millis % 6e4) / 1000)
+        };
     }
 
 </script>
