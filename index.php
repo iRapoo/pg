@@ -40,7 +40,7 @@
         SLOT_BUSY.keyup(function () {
             HEAP.h2 = parseInt(SLOT_BUSY.val()) || 0;
             render();
-            updateTimeCountDown();
+            if (time().timeCalc === 0) updateTimeCountDown();
         });
 
         ADD_BTN.click(function () {
@@ -93,22 +93,33 @@
     }
 
     function countDown() {
-        let timePosition = parseInt(localStorage.getItem('timePosition'));
-        let timePositionFuture = timePosition + ((1000 * 60) * KD);
-        let timeNow = Date.now();
-        let timeCalc = timePositionFuture - timeNow;
+        let __time = time();
 
-        let formatTime = getTime(timeCalc);
-        if (timeCalc > 0) {
-            TIMEOUT.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
+        let formatTime = getTime(__time.timeCalc);
+        if (__time.timeCalc > 0) {
+            ADD_BTN.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
+            ADD_BTN.attr('disabled', true);
         } else {
-            TIMEOUT.html('Жмакай давай!!!');
-            if (timePosition > 0) {
+            ADD_BTN.html('Жмакай давай!!!');
+            if (__time.timePosition > 0) {
                 alert('Жмакай давай!!!');
                 clearInterval(timerId);
                 localStorage.removeItem('timePosition');
+                ADD_BTN.removeAttr('disabled');
             }
         }
+    }
+
+    function time() {
+        let fiveMin = ((1000 * 60) * KD);
+        let timePosition = parseInt(localStorage.getItem('timePosition')) || (Date.now() - fiveMin);
+        let timePositionFuture = timePosition + fiveMin;
+        let timeNow = Date.now();
+        let timeCalc = timePositionFuture - timeNow;
+
+        return {
+            timePosition, timePositionFuture, timeNow, timeCalc
+        };
     }
 
     function timeConvert(sec) {
