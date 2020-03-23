@@ -4,7 +4,7 @@
 <span>Powered by Quenix Apps</span><br><br>
 
 <div class="result" style="display: inline-block;"></div>&nbsp;&nbsp;&nbsp;
-<button>Крутить</button>&nbsp;&nbsp;&nbsp;<span class="timeout"></span>
+<button>{{spinBtnLabel}}</button>&nbsp;&nbsp;&nbsp;<span class="timeout"></span>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
@@ -19,6 +19,7 @@
 
     let SLOT_ALL, SLOT_BUSY, RESULT, ADD_BTN, TIMEOUT;
     let timerId;
+    let spinBtnLabel = 'Жмакай давай!!!';
 
     $(function () {
 
@@ -27,6 +28,8 @@
         RESULT = $('.result');
         ADD_BTN = $('button');
         TIMEOUT = $('.timeout');
+
+        ADD_BTN.html(spinBtnLabel);
 
         if (HEAP.h1 > 0) SLOT_ALL.val(HEAP.h1);
         if (HEAP.h2 > 0) SLOT_BUSY.val(HEAP.h2); else ADD_BTN.hide();
@@ -96,14 +99,15 @@
         let __time = time();
 
         let formatTime = getTime(__time.timeCalc);
+        console.log(__time);
         if (__time.timeCalc !== 0) {
             if (__time.timeCalc > 0) {
                 ADD_BTN.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
                 ADD_BTN.attr('disabled', true);
             } else {
-                ADD_BTN.html('Жмакай давай!!!');
-                if (__time.timePosition > 0) {
-                    alert('Жмакай давай!!!');
+                ADD_BTN.html(spinBtnLabel);
+                if (__time.timePosition > 0 && __time.timeCalc !== -1) {
+                    alert(spinBtnLabel);
                     clearInterval(timerId);
                     localStorage.removeItem('timePosition');
                     ADD_BTN.removeAttr('disabled');
