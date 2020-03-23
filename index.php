@@ -2,7 +2,7 @@
 <head>
     <title>PG slots item calculator</title>
 
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 </head>
 <body>
 
@@ -19,7 +19,6 @@
 <button>{{spinBtnLabel}}</button>&nbsp;&nbsp;&nbsp;<span class="timeout"></span>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="libs/jquery.mfancytitle-0.4.1.min.js"></script>
 <script src="calc.js"></script>
 
 </body>

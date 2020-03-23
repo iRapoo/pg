@@ -1,12 +1,12 @@
 const MID = 3;  // Среднее число выпаданий
 const KD = 5;   // Время возобновления в минутах
+const PS = 30;  // Секунд для предстарта
 
 let HEAP = JSON.parse(localStorage.getItem('savedHeap')) || {h1: 0, h2: 0};
-let CALC = 0;
 let resObject = {};
 
 let SLOT_ALL, SLOT_BUSY, RESULT, ADD_BTN, TIMEOUT;
-let timerId;
+let timerId, alarmId;
 let spinBtnLabel = 'Жмакай давай!!!';
 
 $(function () {
@@ -87,7 +87,6 @@ function countDown() {
     let __time = time();
 
     let formatTime = getTime(__time.timeCalc);
-    console.log(__time.timeCalc);
     if (__time.timeCalc !== 0) {
         if (__time.timeCalc > 0) {
             ADD_BTN.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
@@ -101,6 +100,11 @@ function countDown() {
                 ADD_BTN.removeAttr('disabled');
             }
         }
+    }
+    if(__time.timeCalc < (PS * 1000) && __time.timeCalc > 0) {
+        alarm('start');
+    } else {
+        alarm('stop');
     }
 }
 
@@ -128,4 +132,19 @@ function getTime(millis) {
         mins: Math.floor((millis % 36e5) / 6e4),
         secs: Math.floor((millis % 6e4) / 1000)
     };
+}
+
+function alarm($type) {
+    if ($type !== 'stop') {
+        alarmId = setInterval(function () {
+            if (getTime(Date.now()).secs % 2) {
+                $('link[type="image/x-icon"]').attr('href', 'img/alericon.png');
+            } else {
+                $('link[type="image/x-icon"]').attr('href', 'img/favicon.png');
+            }
+        }, 500);
+    } else {
+        clearInterval(alarmId);
+        $('link[type="image/x-icon"]').attr('href', 'img/favicon.png');
+    }
 }
