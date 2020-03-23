@@ -96,16 +96,18 @@
         let __time = time();
 
         let formatTime = getTime(__time.timeCalc);
-        if (__time.timeCalc > 0) {
-            ADD_BTN.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
-            ADD_BTN.attr('disabled', true);
-        } else {
-            ADD_BTN.html('Жмакай давай!!!');
-            if (__time.timePosition > 0) {
-                alert('Жмакай давай!!!');
-                clearInterval(timerId);
-                localStorage.removeItem('timePosition');
-                ADD_BTN.removeAttr('disabled');
+        if (__time.timeCalc !== 0) {
+            if (__time.timeCalc > 0) {
+                ADD_BTN.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
+                ADD_BTN.attr('disabled', true);
+            } else {
+                ADD_BTN.html('Жмакай давай!!!');
+                if (__time.timePosition > 0) {
+                    alert('Жмакай давай!!!');
+                    clearInterval(timerId);
+                    localStorage.removeItem('timePosition');
+                    ADD_BTN.removeAttr('disabled');
+                }
             }
         }
     }
