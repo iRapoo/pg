@@ -99,7 +99,6 @@
         let __time = time();
 
         let formatTime = getTime(__time.timeCalc);
-        console.log(__time);
         if (__time.timeCalc !== 0) {
             if (__time.timeCalc > 0) {
                 ADD_BTN.html('<i>' + formatTime.mins + ' мин. ' + formatTime.secs + ' сек.</i>');
