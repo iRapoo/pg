@@ -58,7 +58,7 @@ function calcPG() {
 
     return {
         'status': true,
-        'iter': Math.round(diff / MID),
+        'iter': Math.ceil(diff / MID),
         'time': timeConvert(((diff / MID) * KD) * 60)
     };
 }
