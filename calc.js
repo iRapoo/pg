@@ -81,6 +81,7 @@ function updateTimeCountDown() {
     localStorage.setItem('timePosition', Date.now().toString());
     clearInterval(timerId);
     timerId = setInterval(countDown);
+    alarm('stop');
 }
 
 function countDown() {
@@ -94,18 +95,19 @@ function countDown() {
         } else {
             ADD_BTN.html(spinBtnLabel);
             if (__time.timePosition > 0 && __time.timeCalc !== -1) {
-                alert(spinBtnLabel);
+                //alert(spinBtnLabel);
+                alarm('start');
                 clearInterval(timerId);
                 localStorage.removeItem('timePosition');
                 ADD_BTN.removeAttr('disabled');
             }
         }
     }
-    if(__time.timeCalc < (PS * 1000) && __time.timeCalc > 0) {
+    /*if(__time.timeCalc < (PS * 1000) && __time.timeCalc > 0) {
         alarm('start');
     } else {
         alarm('stop');
-    }
+    }*/
 }
 
 function time() {
@@ -134,8 +136,8 @@ function getTime(millis) {
     };
 }
 
-function alarm($type) {
-    if ($type !== 'stop') {
+function alarm($action) {
+    if ($action !== 'stop') {
         alarmId = setInterval(function () {
             if (getTime(Date.now()).secs % 2) {
                 $('link[type="image/x-icon"]').attr('href', 'img/alericon.png');
