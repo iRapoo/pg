@@ -80,6 +80,7 @@ function render() {
     } else {
         RESULT.html(resObject.message);
         ADD_BTN.hide();
+        alarm('stop');
     }
     localStorage.setItem('savedHeap', JSON.stringify(HEAP));
     timerId = setInterval(countDown);
