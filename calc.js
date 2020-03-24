@@ -23,25 +23,33 @@ $(function () {
     if (HEAP.h2 > 0) SLOT_BUSY.val(HEAP.h2); else ADD_BTN.hide();
     if (HEAP.h1 > 0 || HEAP.h2 > 0) render();
 
-    SLOT_ALL.keyup(function () {
-        HEAP.h1 = parseInt(SLOT_ALL.val()) || 0;
-        render();
-    });
+    SLOT_ALL.keyup(onSlotAll);
+    SLOT_ALL.on('change', onSlotAll);
 
-    SLOT_BUSY.keyup(function () {
-        HEAP.h2 = parseInt(SLOT_BUSY.val()) || 0;
-        render();
-        if (time().timeCalc === 0) updateTimeCountDown();
-    });
+    SLOT_BUSY.keyup(onSlotBusy);
+    SLOT_BUSY.on('change', onSlotBusy);
 
-    ADD_BTN.click(function () {
-        HEAP.h2 += MID;
-        render();
-        SLOT_BUSY.val(HEAP.h2);
-        updateTimeCountDown();
-    });
+    ADD_BTN.click(onAddBtn);
 
 });
+
+function onSlotAll() {
+    HEAP.h1 = parseInt(SLOT_ALL.val()) || 0;
+    render();
+}
+
+function onSlotBusy() {
+    HEAP.h2 = parseInt(SLOT_BUSY.val()) || 0;
+    render();
+    if (time().timeCalc === 0) updateTimeCountDown();
+}
+
+function onAddBtn() {
+    HEAP.h2 += MID;
+    render();
+    SLOT_BUSY.val(HEAP.h2);
+    updateTimeCountDown();
+}
 
 function calcPG() {
     let diff = (HEAP.h1 - HEAP.h2);
