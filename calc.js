@@ -88,7 +88,8 @@ function render() {
 }
 
 function updateTimeCountDown() {
-    localStorage.setItem('timePosition', Date.now().toString());
+    if (calcPG()) localStorage.setItem('timePosition', Date.now().toString());
+    else localStorage.removeItem('timePosition');
     clearInterval(timerId);
     timerId = setInterval(countDown);
     alarm('stop');
