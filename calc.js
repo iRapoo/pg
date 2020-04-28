@@ -88,11 +88,13 @@ function render() {
 }
 
 function updateTimeCountDown() {
-    if (calcPG()) localStorage.setItem('timePosition', Date.now().toString());
-    else localStorage.removeItem('timePosition');
+    localStorage.setItem('timePosition', Date.now().toString());
     clearInterval(timerId);
     timerId = setInterval(countDown);
     alarm('stop');
+    if (!calcPG()) {
+        localStorage.removeItem('timePosition');
+    }
 }
 
 function countDown() {
