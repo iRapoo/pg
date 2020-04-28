@@ -88,13 +88,13 @@ function render() {
 }
 
 function updateTimeCountDown() {
-    if (resObject) {
+    if (resObject.status) {
         localStorage.setItem('timePosition', Date.now().toString());
     }
     clearInterval(timerId);
     timerId = setInterval(countDown);
     alarm('stop');
-    if (!resObject) {
+    if (!resObject.status) {
         localStorage.removeItem('timePosition');
     }
 }
