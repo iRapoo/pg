@@ -36,18 +36,12 @@ $(function () {
 function onSlotAll() {
     HEAP.h1 = parseInt(SLOT_ALL.val()) || 0;
     render();
-    if (!calcPG()) {
-        localStorage.removeItem('timePosition');
-    }
 }
 
 function onSlotBusy() {
     HEAP.h2 = parseInt(SLOT_BUSY.val()) || 0;
     render();
     if (time().timeCalc === 0) updateTimeCountDown();
-    if (!calcPG()) {
-        localStorage.removeItem('timePosition');
-    }
 }
 
 function onAddBtn() {
@@ -55,9 +49,6 @@ function onAddBtn() {
     render();
     SLOT_BUSY.val(HEAP.h2);
     updateTimeCountDown();
-    if (!calcPG()) {
-        localStorage.removeItem('timePosition');
-    }
 }
 
 function calcPG() {
@@ -97,10 +88,15 @@ function render() {
 }
 
 function updateTimeCountDown() {
-    localStorage.setItem('timePosition', Date.now().toString());
+    if (resObject) {
+        localStorage.setItem('timePosition', Date.now().toString());
+    }
     clearInterval(timerId);
     timerId = setInterval(countDown);
     alarm('stop');
+    if (!resObject) {
+        localStorage.removeItem('timePosition');
+    }
 }
 
 function countDown() {
